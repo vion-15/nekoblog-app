@@ -1,15 +1,15 @@
 "use client"
 
-import * as React from "react"
-import { Ellipsis, Moon } from "lucide-react";
+import { Ellipsis, Moon, Search } from "lucide-react";
 import Image from "next/image";
 import { Button } from "./ui/button";
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "./ui/navigation-menu";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "./ui/input-group";
 
 export default function Header() {
     return (
         <div className="border border-black py-5 px-3">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between lg:mx-14">
                 <div className="flex items-center gap-3">
                     <Image
                         src="/logo.png"
@@ -17,40 +17,52 @@ export default function Header() {
                         width={50}
                         height={50}
                     />
-                    <h2 className="font-bold">NekoBlog-App</h2>
+                    <p className="font-bold text-2xl">NekoBlog-App</p>
                 </div>
                 <div className="hidden md:flex">
                     <NavigationMenu>
-                        <NavigationMenuList>
+                        <NavigationMenuList className="flex gap-5">
                             <NavigationMenuItem>
-                                <NavigationMenuLink>Home</NavigationMenuLink>
+                                <NavigationMenuLink className="text-xl">Home</NavigationMenuLink>
                             </NavigationMenuItem>
                             <NavigationMenuItem>
-                                <NavigationMenuLink>About</NavigationMenuLink>
+                                <NavigationMenuLink className="text-xl">About</NavigationMenuLink>
                             </NavigationMenuItem>
                             <NavigationMenuItem>
-                                <NavigationMenuLink>Contact</NavigationMenuLink>
+                                <NavigationMenuLink className="text-xl">Contact</NavigationMenuLink>
                             </NavigationMenuItem>
                         </NavigationMenuList>
                     </NavigationMenu>
                 </div>
-                <div className="flex">
-                    <Button variant="ghost">
+                <div className="flex gap-2 lg:w-3xl items-center">
+                    <InputGroup className="hidden md:flex lg:max-w-3xl h-10">
+                        <InputGroupInput placeholder="Search..." />
+                        <InputGroupAddon>
+                            <Search />
+                        </InputGroupAddon>
+                    </InputGroup>
+                    <Button variant="outline" className="h-12 w-12">
                         <Moon />
                     </Button>
-                    <NavigationMenu className="md:hidden">
+                    <NavigationMenu className="md:hidden h-12 w-12">
                         <NavigationMenuList>
                             <NavigationMenuItem>
                                 <NavigationMenuTrigger>
                                     <Ellipsis />
                                 </NavigationMenuTrigger>
                                 <NavigationMenuContent>
-                                    <ul className="w-48">
-                                        <li>Home</li>
-                                        <li>About</li>
-                                        <li>Contact</li>
+                                    <ul className="w-60 flex flex-col items-center gap-2">
+                                        <Button variant="ghost" className="w-60">
+                                            <li>Home</li>
+                                        </Button>
+                                        <Button variant="ghost" className="w-60">
+                                            <li>About</li>
+                                        </Button>
+                                        <Button variant="ghost" className="w-60">
+                                            Contact
+                                        </Button>
                                         <li>
-                                            <Button>
+                                            <Button className="w-60">
                                                 Sign in
                                             </Button>
                                         </li>
@@ -59,7 +71,7 @@ export default function Header() {
                             </NavigationMenuItem>
                         </NavigationMenuList>
                     </NavigationMenu>
-                    <Button className="hidden md:flex">
+                    <Button className="hidden md:flex h-12 lg:text-xl">
                         Sign in
                     </Button>
                 </div>
