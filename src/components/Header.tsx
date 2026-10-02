@@ -1,15 +1,16 @@
 "use client"
 
-import { Ellipsis, Moon, Search } from "lucide-react";
+import { Moon, Search } from "lucide-react";
 import Image from "next/image";
 import { Button } from "./ui/button";
-import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "./ui/navigation-menu";
+import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList } from "./ui/navigation-menu";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "./ui/input-group";
 
 export default function Header() {
     return (
-        <div className="border border-black py-5 px-3">
+        <div className="border-b border-sidebar-border py-5 px-3">
             <div className="flex items-center justify-between lg:mx-14">
+                {/* Logo + Nama App */}
                 <div className="flex items-center gap-3">
                     <Image
                         src="/logo.png"
@@ -17,63 +18,51 @@ export default function Header() {
                         width={50}
                         height={50}
                     />
-                    <p className="font-bold text-2xl">NekoBlog-App</p>
+                    <p className="font-bold text-2xl md:text-lg lg:text-2xl">NekoBlog-App</p>
                 </div>
+
+                {/* Navigation for MD++ */}
                 <div className="hidden md:flex">
                     <NavigationMenu>
-                        <NavigationMenuList className="flex gap-5">
+                        <NavigationMenuList className="flex gap-5 lg:gap-8">
                             <NavigationMenuItem>
-                                <NavigationMenuLink className="text-xl">Home</NavigationMenuLink>
+                                <NavigationMenuLink className="text-xl lg:text-2xl">Feed</NavigationMenuLink>
                             </NavigationMenuItem>
                             <NavigationMenuItem>
-                                <NavigationMenuLink className="text-xl">About</NavigationMenuLink>
+                                <NavigationMenuLink className="text-xl lg:text-2xl">Explore</NavigationMenuLink>
                             </NavigationMenuItem>
                             <NavigationMenuItem>
-                                <NavigationMenuLink className="text-xl">Contact</NavigationMenuLink>
+                                <NavigationMenuLink className="text-xl lg:text-2xl">Chat</NavigationMenuLink>
+                            </NavigationMenuItem>
+                            <NavigationMenuItem>
+                                <NavigationMenuLink className="text-xl lg:text-2xl">Follow</NavigationMenuLink>
                             </NavigationMenuItem>
                         </NavigationMenuList>
                     </NavigationMenu>
                 </div>
-                <div className="flex gap-2 lg:w-3xl items-center">
-                    <InputGroup className="hidden md:flex lg:max-w-3xl h-10">
-                        <InputGroupInput placeholder="Search..." />
+
+                {/* Searchbar + Mode Button + Sign in Button */}
+                <div className="flex gap-3 lg:w-3xl items-center justify-between">
+                    <InputGroup className="hidden md:flex lg:max-w-3xl h-10 py-5">
+                        <InputGroupInput placeholder="Search..." className="placeholder:text-lg" />
                         <InputGroupAddon>
-                            <Search />
+                            <Search className="lg:size-8!"/>
                         </InputGroupAddon>
                     </InputGroup>
-                    <Button variant="outline" className="h-12 w-12">
-                        <Moon />
-                    </Button>
-                    <NavigationMenu className="md:hidden h-12 w-12">
-                        <NavigationMenuList>
+                    <NavigationMenu>
+                        <NavigationMenuList className="flex gap-2">
                             <NavigationMenuItem>
-                                <NavigationMenuTrigger>
-                                    <Ellipsis />
-                                </NavigationMenuTrigger>
-                                <NavigationMenuContent>
-                                    <ul className="w-60 flex flex-col items-center gap-2">
-                                        <Button variant="ghost" className="w-60">
-                                            <li>Home</li>
-                                        </Button>
-                                        <Button variant="ghost" className="w-60">
-                                            <li>About</li>
-                                        </Button>
-                                        <Button variant="ghost" className="w-60">
-                                            Contact
-                                        </Button>
-                                        <li>
-                                            <Button className="w-60">
-                                                Sign in
-                                            </Button>
-                                        </li>
-                                    </ul>
-                                </NavigationMenuContent>
+                                <Button variant="outline" className="h-12 w-16">
+                                    <Moon className="size-5!"/>
+                                </Button>
+                            </NavigationMenuItem>
+                            <NavigationMenuItem>
+                                <Button className="h-12 lg:text-lg w-fit">
+                                    Sign in
+                                </Button>
                             </NavigationMenuItem>
                         </NavigationMenuList>
                     </NavigationMenu>
-                    <Button className="hidden md:flex h-12 lg:text-xl">
-                        Sign in
-                    </Button>
                 </div>
             </div>
         </div>
