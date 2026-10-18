@@ -24,6 +24,26 @@ services:
         max-size: "10m"
         max-file: "3"
     restart: unless-stopped
+  
+  auth-service-back:
+    build:
+      context: ./auth-service
+    restart: unless-stopped
+    depends_on:
+      auth-db:
+        condition: service_healthy
+    env_file:
+      - path: ./auth-service/.env.development
+        required: true
+    ports:
+      - "127.0.0.1:8080:8080"
+    networks:
+      - db-net
+    logging:
+      driver: local
+      options:
+        max-size: "10m"
+        max-file: "3"
 
 volumes:
   auth_data:
