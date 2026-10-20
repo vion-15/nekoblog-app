@@ -13,6 +13,8 @@ func main() {
 	_, err := database.ConnectDatabase()
 	if err != nil {
 		log.Fatalf("Failed connect to database: %v", err)
+	} else {
+		println("Database connected successfully")
 	}
 
 	r := routes.SetupRouter()
