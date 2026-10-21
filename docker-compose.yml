@@ -32,6 +32,8 @@ services:
         required: true
     volumes:
       - auth_data_standby:/var/lib/postgresql
+    ports:
+      - "127.0.0.1:5434:5432"
     networks:
       - db-net
     healthcheck:
