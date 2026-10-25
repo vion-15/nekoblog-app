@@ -12,6 +12,7 @@ data "external_schema" "gorm" {
 env "gorm" {
     src = data.external_schema.gorm.url
     dev = "docker://postgres/18/dev"
+    url = getenv("DB_URL")
     migration {
         dir = "file://..//migrations"
     }
@@ -21,3 +22,7 @@ env "gorm" {
         }
     }
 }
+
+# atlas migrate diff --env gorm
+# atlas migrate validate --env gorm
+# atlas migrate apply --env gorm

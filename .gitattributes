@@ -1,0 +1,2 @@
+*.sql text eol=lf
+*.sum text eol=lf
