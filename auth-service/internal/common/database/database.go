@@ -2,10 +2,8 @@ package database
 
 import (
 	"fmt"
-	"log"
 	"os"
 
-	"github.com/vion-15/nekoblog-app/auth-service/internal/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -25,14 +23,6 @@ func ConnectDatabase() (*gorm.DB, error) {
 
 	if err != nil {
 		return nil, err
-	}
-
-	err = db.AutoMigrate(&models.User{})
-
-	if err != nil {
-		log.Fatalf("Failed to Migration User Schema")
-	} else {
-		println("Migration User Schema Successfully")
 	}
 
 	return db, nil
