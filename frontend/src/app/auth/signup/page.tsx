@@ -7,10 +7,11 @@ import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/c
 import { Input } from "@/components/ui/input";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { EyeOffIcon } from "lucide-react";
+import { Eye, EyeOffIcon } from "lucide-react";
 import Form from "next/form";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -21,16 +22,25 @@ const formSchema = z.object({
     password: z
         .string()
         .min(8, "Minimal password is 8 characters")
-        .max(16, "Maximal password is 16 characters")
+        .max(16, "Maximal password is 16 characters"),
+    confirm: z
+        .string(),
 })
+    .refine((data) => data.password === data.confirm, {
+        error: "Password don't match",
+        path: ["confirm"],
+    })
 
 export default function Signup() {
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             email: "",
             password: "",
+            confirm: "",
         },
     })
 
@@ -60,7 +70,7 @@ export default function Signup() {
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <Form action="" onSubmit={form.handleSubmit(onSubmit)} id="form-signup">
+                    <Form action="" onSubmit={form.handleSubmit(onSubmit)} id="form-signup" className="lg:px-5">
                         <FieldGroup>
                             <Controller
                                 name="email"
@@ -71,19 +81,20 @@ export default function Signup() {
                                             Email:
                                         </FieldLabel>
                                         <FieldDescription className="lg:text-xl">
-                                            your active email
+                                            Your active email
                                         </FieldDescription>
                                         <Input
                                             {...field}
                                             id="email-form"
                                             aria-invalid={fieldState.invalid}
-                                            placeholder="your@email.com"
+                                            placeholder="Your@email.com"
                                             autoComplete="off"
-                                            className="h-10 w-fit lg:h-16 lg:placeholder:text-xl lg:text-xl!"
+                                            className="h-10 w-full lg:h-16 lg:placeholder:text-xl lg:text-xl!"
                                             type="email"
+                                            required
                                         />
                                         {fieldState.invalid && (
-                                            <FieldError errors={[fieldState.error]} />
+                                            <FieldError errors={[fieldState.error]} className="lg:text-xl" />
                                         )}
                                     </Field>
                                 )}
@@ -96,9 +107,6 @@ export default function Signup() {
                                         <FieldLabel htmlFor="password-form" className="text-xl lg:text-3xl">
                                             Password:
                                         </FieldLabel>
-                                        <FieldDescription  className="lg:text-xl">
-                                            please use strong password
-                                        </FieldDescription>
                                         <InputGroup className="h-10 w-fit lg:h-16 ">
                                             <InputGroupInput
                                                 {...field}
@@ -107,39 +115,58 @@ export default function Signup() {
                                                 placeholder="Password"
                                                 autoComplete="off"
                                                 className="lg:placeholder:text-xl lg:text-xl!"
-                                                type="password"
+                                                type={showPassword ? "text" : "password"}
                                             />
                                             <InputGroupAddon align="inline-end">
-                                                <EyeOffIcon className="size-4 lg:size-7" />
+                                                {showPassword ? <Button variant="ghost" onClick={() => setShowPassword(false)}>
+                                                    <Eye className="size-4 lg:size-7" />
+                                                </Button> : <Button variant="ghost" onClick={() => setShowPassword(true)}>
+                                                    <EyeOffIcon className="size-4 lg:size-7" />
+                                                </Button>}
                                             </InputGroupAddon>
-                                            {fieldState.invalid && (
-                                                <FieldError errors={[fieldState.error]} />
-                                            )}
                                         </InputGroup>
+                                        {fieldState.invalid && (
+                                            <FieldError errors={[fieldState.error]} className="lg:text-xl" />
+                                        )}
                                     </Field>
                                 )}
                             />
-                            <Field>
-                                <FieldLabel htmlFor="form-confirm" className="text-xl lg:text-3xl">
-                                    Confirm Password:
-                                </FieldLabel>
-                                <InputGroup className="h-10 w-fit lg:h-16">
-                                    <InputGroupInput
-                                        id="form-confirm"
-                                        placeholder="Confirm password"
-                                        autoComplete="off"
-                                        className="lg:placeholder:text-xl lg:text-xl!"
-                                        type="password"
-                                    />
-                                    <InputGroupAddon align="inline-end">
-                                        <EyeOffIcon className="size-4 lg:size-7" />
-                                    </InputGroupAddon>
-                                </InputGroup>
-                            </Field>
+                            <Controller
+                                name="confirm"
+                                control={form.control}
+                                render={({ field, fieldState }) => (
+                                    <Field data-invalid={fieldState.invalid}>
+                                        <FieldLabel htmlFor="form-confirm" className="text-xl lg:text-3xl">
+                                            Confirm Password:
+                                        </FieldLabel>
+                                        <InputGroup className="h-10 w-fit lg:h-16">
+                                            <InputGroupInput
+                                                {...field}
+                                                id="form-confirm"
+                                                aria-invalid={fieldState.invalid}
+                                                placeholder="Confirm password"
+                                                autoComplete="off"
+                                                className="lg:placeholder:text-xl lg:text-xl!"
+                                                type={showConfirmPassword ? "text" : "password"}
+                                            />
+                                            <InputGroupAddon align="inline-end">
+                                            {showConfirmPassword ? <Button variant="ghost" onClick={() => setShowConfirmPassword(false)}>
+                                                    <Eye className="size-4 lg:size-7" />
+                                                </Button> : <Button variant="ghost" onClick={() => setShowConfirmPassword(true)}>
+                                                    <EyeOffIcon className="size-4 lg:size-7" />
+                                                </Button>}
+                                            </InputGroupAddon>
+                                        </InputGroup>
+                                        {fieldState.invalid && (
+                                            <FieldError errors={[fieldState.error]} className="lg:text-xl" />
+                                        )}
+                                    </Field>
+                                )}
+                            />
                         </FieldGroup>
                     </Form>
                 </CardContent>
-                <CardFooter className="flex flex-col gap-3">
+                <CardFooter className="flex flex-col gap-3 lg:px-10">
                     <Button
                         type="submit"
                         form="form-signup"
