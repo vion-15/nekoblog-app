@@ -11,7 +11,7 @@ import { Eye, EyeOffIcon } from "lucide-react";
 import Form from "next/form";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -34,6 +34,7 @@ const formSchema = z.object({
 export default function Signup() {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [ isAlertDialog, setIsAlertDialog ] = useState(false);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -43,6 +44,24 @@ export default function Signup() {
             confirm: "",
         },
     })
+
+    const beforeUnloadHandler = (event: BeforeUnloadEvent) => {
+        event.preventDefault();
+        event.returnValue = true;
+    }
+
+    const { isDirty } = form.formState;
+
+    useEffect(() => {
+        if (isDirty) {
+            window.addEventListener("beforeunload", beforeUnloadHandler);
+        }
+
+        return () => {
+            window.removeEventListener("beforeunload", beforeUnloadHandler);
+        }
+
+    }, [isDirty])
 
     function onSubmit(data: z.infer<typeof formSchema>) {
         console.log(data);
