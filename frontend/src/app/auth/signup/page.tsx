@@ -1,6 +1,7 @@
 
 "use client"
 
+import DialogBoxConfirm from "@/components/DialogBoxConfirm";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
@@ -11,7 +12,7 @@ import { Eye, EyeOffIcon } from "lucide-react";
 import Form from "next/form";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -34,7 +35,7 @@ const formSchema = z.object({
 export default function Signup() {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const [ isAlertDialog, setIsAlertDialog ] = useState(false);
+    const [isAlertDialog, setIsAlertDialog] = useState(false);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -53,155 +54,174 @@ export default function Signup() {
     const { isDirty } = form.formState;
 
     useEffect(() => {
+        history.pushState(null, "");
+    }, []);
+
+    const handlePopstate = useCallback(() => {
+        if (isDirty) {
+            setIsAlertDialog(true);
+        }
+    }, [isDirty])
+
+    useEffect(() => {
+
+        window.addEventListener("popstate", handlePopstate);
+
         if (isDirty) {
             window.addEventListener("beforeunload", beforeUnloadHandler);
         }
 
         return () => {
             window.removeEventListener("beforeunload", beforeUnloadHandler);
+            window.removeEventListener("popstate", handlePopstate);
         }
 
-    }, [isDirty])
+    }, [isDirty, handlePopstate])
 
     function onSubmit(data: z.infer<typeof formSchema>) {
         console.log(data);
     }
 
     return (
-        <div className="m-4 min-h-screen flex md:items-center md:gap-3 md:mx-14
-        lg:mx-80 lg:gap-10 md:mt-10 lg:mt-0">
-            <div className="hidden md:flex w-[50%] md:flex-col md:items-center md:gap-4">
-                <Image
-                    src="/logo.png"
-                    alt="gambar logo"
-                    width={125}
-                    height={125}
-                    className="w-32 h-32 lg:w-40 lg:h-40"
-                />
-                <h1 className="text-2xl font-bold lg:text-4xl">Connect, Share and Discover</h1>
-                <h3 className="text-chart-3 text-base lg:text-lg">A place to share your thoughts, connect with others, and
-                    discover something new every day.</h3>
+        <>
+            <div className="m-4 min-h-screen flex md:items-center md:gap-3 md:mx-14
+                lg:mx-80 lg:gap-10 md:mt-10 lg:mt-0">
+                <div className="hidden md:flex w-[50%] md:flex-col md:items-center md:gap-4">
+                    <Image
+                        src="/logo.png"
+                        alt="gambar logo"
+                        width={125}
+                        height={125}
+                        className="w-32 h-32 lg:w-40 lg:h-40"
+                    />
+                    <h1 className="text-2xl font-bold lg:text-4xl">Connect, Share and Discover</h1>
+                    <h3 className="text-chart-3 text-base lg:text-lg">A place to share your thoughts, connect with others, and
+                        discover something new every day.</h3>
+                </div>
+                <Card className="w-full max-h-fit md:w-[50%] shadow-xl">
+                    <CardHeader className="flex justify-center mt-3 lg:mt-5">
+                        <CardTitle className="flex items-center">
+                            <h1 className="text-2xl font-bold lg:text-4xl">Create new account</h1>
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <Form action="" onSubmit={form.handleSubmit(onSubmit)} id="form-signup" className="lg:px-5">
+                            <FieldGroup>
+                                <Controller
+                                    name="email"
+                                    control={form.control}
+                                    render={({ field, fieldState }) => (
+                                        <Field data-invalid={fieldState.invalid}>
+                                            <FieldLabel htmlFor="email-form" className="text-xl lg:text-3xl">
+                                                Email:
+                                            </FieldLabel>
+                                            <FieldDescription className="lg:text-xl">
+                                                Your active email
+                                            </FieldDescription>
+                                            <Input
+                                                {...field}
+                                                id="email-form"
+                                                aria-invalid={fieldState.invalid}
+                                                placeholder="Your@email.com"
+                                                autoComplete="off"
+                                                className="h-10 w-full lg:h-16 lg:placeholder:text-xl lg:text-xl!"
+                                                type="email"
+                                                required
+                                            />
+                                            {fieldState.invalid && (
+                                                <FieldError errors={[fieldState.error]} className="lg:text-xl" />
+                                            )}
+                                        </Field>
+                                    )}
+                                />
+                                <Controller
+                                    name="password"
+                                    control={form.control}
+                                    render={({ field, fieldState }) => (
+                                        <Field data-invalid={fieldState.invalid}>
+                                            <FieldLabel htmlFor="password-form" className="text-xl lg:text-3xl">
+                                                Password:
+                                            </FieldLabel>
+                                            <InputGroup className="h-10 w-fit lg:h-16 ">
+                                                <InputGroupInput
+                                                    {...field}
+                                                    id="password-form"
+                                                    aria-invalid={fieldState.invalid}
+                                                    placeholder="Password"
+                                                    autoComplete="off"
+                                                    className="lg:placeholder:text-xl lg:text-xl!"
+                                                    type={showPassword ? "text" : "password"}
+                                                />
+                                                <InputGroupAddon align="inline-end">
+                                                    {showPassword ? <Button variant="ghost" onClick={() => setShowPassword(false)}>
+                                                        <Eye className="size-4 lg:size-7" />
+                                                    </Button> : <Button variant="ghost" onClick={() => setShowPassword(true)}>
+                                                        <EyeOffIcon className="size-4 lg:size-7" />
+                                                    </Button>}
+                                                </InputGroupAddon>
+                                            </InputGroup>
+                                            {fieldState.invalid && (
+                                                <FieldError errors={[fieldState.error]} className="lg:text-xl" />
+                                            )}
+                                        </Field>
+                                    )}
+                                />
+                                <Controller
+                                    name="confirm"
+                                    control={form.control}
+                                    render={({ field, fieldState }) => (
+                                        <Field data-invalid={fieldState.invalid}>
+                                            <FieldLabel htmlFor="form-confirm" className="text-xl lg:text-3xl">
+                                                Confirm Password:
+                                            </FieldLabel>
+                                            <InputGroup className="h-10 w-fit lg:h-16">
+                                                <InputGroupInput
+                                                    {...field}
+                                                    id="form-confirm"
+                                                    aria-invalid={fieldState.invalid}
+                                                    placeholder="Confirm password"
+                                                    autoComplete="off"
+                                                    className="lg:placeholder:text-xl lg:text-xl!"
+                                                    type={showConfirmPassword ? "text" : "password"}
+                                                />
+                                                <InputGroupAddon align="inline-end">
+                                                    {showConfirmPassword ? <Button variant="ghost" onClick={() => setShowConfirmPassword(false)}>
+                                                        <Eye className="size-4 lg:size-7" />
+                                                    </Button> : <Button variant="ghost" onClick={() => setShowConfirmPassword(true)}>
+                                                        <EyeOffIcon className="size-4 lg:size-7" />
+                                                    </Button>}
+                                                </InputGroupAddon>
+                                            </InputGroup>
+                                            {fieldState.invalid && (
+                                                <FieldError errors={[fieldState.error]} className="lg:text-xl" />
+                                            )}
+                                        </Field>
+                                    )}
+                                />
+                            </FieldGroup>
+                        </Form>
+                    </CardContent>
+                    <CardFooter className="flex flex-col gap-3 lg:px-10">
+                        <Button
+                            type="submit"
+                            form="form-signup"
+                            className="w-full h-11 text-lg lg:h-14 lg:text-xl"
+                        >
+                            Sign up
+                        </Button>
+                        <h2 className="text-sidebar-ring text-base lg:text-lg">--Or--</h2>
+                        <Button className="w-full h-11 text-lg lg:h-14 lg:text-xl">
+                            Sign up with Google
+                        </Button>
+                        <p className="text-base mt-4 lg:text-lg">Already have an account?
+                            <Link href="/auth/signin" className="text-chart-2 hover:text-chart-5"> Sign in</Link>
+                        </p>
+                    </CardFooter>
+                </Card>
             </div>
-            <Card className="w-full max-h-fit md:w-[50%] shadow-xl">
-                <CardHeader className="flex justify-center mt-3 lg:mt-5">
-                    <CardTitle className="flex items-center">
-                        <h1 className="text-2xl font-bold lg:text-4xl">Create new account</h1>
-                    </CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <Form action="" onSubmit={form.handleSubmit(onSubmit)} id="form-signup" className="lg:px-5">
-                        <FieldGroup>
-                            <Controller
-                                name="email"
-                                control={form.control}
-                                render={({ field, fieldState }) => (
-                                    <Field data-invalid={fieldState.invalid}>
-                                        <FieldLabel htmlFor="email-form" className="text-xl lg:text-3xl">
-                                            Email:
-                                        </FieldLabel>
-                                        <FieldDescription className="lg:text-xl">
-                                            Your active email
-                                        </FieldDescription>
-                                        <Input
-                                            {...field}
-                                            id="email-form"
-                                            aria-invalid={fieldState.invalid}
-                                            placeholder="Your@email.com"
-                                            autoComplete="off"
-                                            className="h-10 w-full lg:h-16 lg:placeholder:text-xl lg:text-xl!"
-                                            type="email"
-                                            required
-                                        />
-                                        {fieldState.invalid && (
-                                            <FieldError errors={[fieldState.error]} className="lg:text-xl" />
-                                        )}
-                                    </Field>
-                                )}
-                            />
-                            <Controller
-                                name="password"
-                                control={form.control}
-                                render={({ field, fieldState }) => (
-                                    <Field data-invalid={fieldState.invalid}>
-                                        <FieldLabel htmlFor="password-form" className="text-xl lg:text-3xl">
-                                            Password:
-                                        </FieldLabel>
-                                        <InputGroup className="h-10 w-fit lg:h-16 ">
-                                            <InputGroupInput
-                                                {...field}
-                                                id="password-form"
-                                                aria-invalid={fieldState.invalid}
-                                                placeholder="Password"
-                                                autoComplete="off"
-                                                className="lg:placeholder:text-xl lg:text-xl!"
-                                                type={showPassword ? "text" : "password"}
-                                            />
-                                            <InputGroupAddon align="inline-end">
-                                                {showPassword ? <Button variant="ghost" onClick={() => setShowPassword(false)}>
-                                                    <Eye className="size-4 lg:size-7" />
-                                                </Button> : <Button variant="ghost" onClick={() => setShowPassword(true)}>
-                                                    <EyeOffIcon className="size-4 lg:size-7" />
-                                                </Button>}
-                                            </InputGroupAddon>
-                                        </InputGroup>
-                                        {fieldState.invalid && (
-                                            <FieldError errors={[fieldState.error]} className="lg:text-xl" />
-                                        )}
-                                    </Field>
-                                )}
-                            />
-                            <Controller
-                                name="confirm"
-                                control={form.control}
-                                render={({ field, fieldState }) => (
-                                    <Field data-invalid={fieldState.invalid}>
-                                        <FieldLabel htmlFor="form-confirm" className="text-xl lg:text-3xl">
-                                            Confirm Password:
-                                        </FieldLabel>
-                                        <InputGroup className="h-10 w-fit lg:h-16">
-                                            <InputGroupInput
-                                                {...field}
-                                                id="form-confirm"
-                                                aria-invalid={fieldState.invalid}
-                                                placeholder="Confirm password"
-                                                autoComplete="off"
-                                                className="lg:placeholder:text-xl lg:text-xl!"
-                                                type={showConfirmPassword ? "text" : "password"}
-                                            />
-                                            <InputGroupAddon align="inline-end">
-                                            {showConfirmPassword ? <Button variant="ghost" onClick={() => setShowConfirmPassword(false)}>
-                                                    <Eye className="size-4 lg:size-7" />
-                                                </Button> : <Button variant="ghost" onClick={() => setShowConfirmPassword(true)}>
-                                                    <EyeOffIcon className="size-4 lg:size-7" />
-                                                </Button>}
-                                            </InputGroupAddon>
-                                        </InputGroup>
-                                        {fieldState.invalid && (
-                                            <FieldError errors={[fieldState.error]} className="lg:text-xl" />
-                                        )}
-                                    </Field>
-                                )}
-                            />
-                        </FieldGroup>
-                    </Form>
-                </CardContent>
-                <CardFooter className="flex flex-col gap-3 lg:px-10">
-                    <Button
-                        type="submit"
-                        form="form-signup"
-                        className="w-full h-11 text-lg lg:h-14 lg:text-xl"
-                    >
-                        Sign up
-                    </Button>
-                    <h2 className="text-sidebar-ring text-base lg:text-lg">--Or--</h2>
-                    <Button className="w-full h-11 text-lg lg:h-14 lg:text-xl">
-                        Sign up with Google
-                    </Button>
-                    <p className="text-base mt-4 lg:text-lg">Already have an account?
-                        <Link href="/auth/signin" className="text-chart-2 hover:text-chart-5"> Sign in</Link>
-                    </p>
-                </CardFooter>
-            </Card>
-        </div>
+            {/* <div className="fixed">
+                <DialogBoxConfirm />
+            </div> */}
+        </>
     );
 }
