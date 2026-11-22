@@ -1,35 +1,49 @@
 "use client"
 
-import { Bell, LogIn, Moon } from "lucide-react";
+import { Bell, LogIn, Moon, Sun } from "lucide-react";
 import Image from "next/image";
 import { Button } from "./ui/button";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuList } from "./ui/navigation-menu";
 import Link from "next/link";
 import { Popover, PopoverContent, PopoverHeader, PopoverTitle, PopoverTrigger } from "./ui/popover";
 import Datadummy from "../dummy/notification.json";
-import React from "react";
+import React, { useState } from "react";
 import { Separator } from "./ui/separator";
 import { ScrollArea } from "./ui/scroll-area";
 import { Card } from "./ui/card";
 import { Avatar, AvatarFallback } from "./ui/avatar";
+import ThemeProvider from "@/actions/theme";
 
 export default function Header() {
-    
+
     const dataDummy = Datadummy.length > 0;
+    const darkTheme = "dark";
+    const defaultTheme = "default";
+    const [mode, setMode] = useState(defaultTheme);
 
     return (
-        <header className="border-b border-sidebar-border py-5 px-3 flex items-center justify-between">
+        <header className="border-b border-sidebar-border dark:bg-background py-5 px-3 flex items-center justify-between">
 
             {/* Logo + Nama App */}
             <div className="flex items-center gap-3">
-                <Image
-                    src="/logo.png"
-                    alt="gambar logo"
-                    width={50}
-                    height={50}
-                    className="w-9 h-9"
-                />
-                <p className="font-bold text-sm">NekoBlog</p>
+                {mode == "default" ? (
+                    <Image
+                        src="/logo.png"
+                        alt="gambar logo"
+                        width={50}
+                        height={50}
+                        className="w-9 h-9"
+                    />
+                ) : (
+                    <Image
+                        src="/logolight.png"
+                        alt="gambar logo"
+                        width={50}
+                        height={50}
+                        className="w-9 h-9"
+                    />
+                )}
+                <p className="font-bold text-sm dark: text-foreground">NekoBlog</p>
             </div>
 
             {/* Button */}
@@ -64,7 +78,7 @@ export default function Header() {
                                         </ScrollArea>
                                     ) : (
                                         <div className="h-full flex flex-col justify-center items-center gap-2">
-                                            <Bell className="text-gray-400"/>
+                                            <Bell className="text-gray-400" />
                                             <p className="text-sm text-gray-400">No notifications yet</p>
                                         </div>
                                     )}
@@ -73,9 +87,31 @@ export default function Header() {
                         </Popover>
                     </NavigationMenuItem>
                     <NavigationMenuItem>
-                        <Button variant="outline" className="h-8">
-                            <Moon className="size-4" />
-                        </Button>
+                        {mode == "default" ? (
+                            <Button variant="outline" className="h-8" 
+                            onClick={async () => {
+                                try {
+                                    await ThemeProvider(darkTheme);
+                                    setMode(darkTheme);
+                                } catch (error) {
+                                    console.error("Failed to update theme", error)
+                                }
+                            }}>
+                                <Moon className="size-4" />
+                            </Button>
+                        ) : (
+                            <Button variant="outline" className="h-8" 
+                            onClick={async () => {
+                                try {
+                                    await ThemeProvider(defaultTheme);
+                                    setMode(defaultTheme);
+                                } catch (error) {
+                                    console.error("Failed to update theme", error);
+                                }
+                            }}>
+                                <Sun className="size-4" />
+                            </Button>
+                        )}
                     </NavigationMenuItem>
                     <NavigationMenuItem>
                         <Link href="/auth/signin">
