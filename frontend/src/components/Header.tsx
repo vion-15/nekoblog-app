@@ -54,8 +54,8 @@ export default function Header() {
                             <PopoverTrigger render={<Button variant="outline" />}>
                                 <Bell className="size-4" />
                             </PopoverTrigger>
-                            <PopoverContent className="w-60">
-                                <PopoverHeader className="h-60 flex flex-col">
+                            <PopoverContent className="w-60 xs:h-60 sm:h-75 md:h-72">
+                                <PopoverHeader className="h-60 xs:h-full flex flex-col">
                                     <PopoverTitle className="p-2 flex justify-between items-center">
                                         <p className="text-sm">Notification</p>
                                         <Button variant="ghost" className="text-gray-500 text-sm">All read</Button>
@@ -115,10 +115,10 @@ export default function Header() {
                     </NavigationMenuItem>
                     <NavigationMenuItem>
                         <Link href="/auth/signin">
-                            <Button className="h-8 sm:hidden">
+                            <Button className="h-8 xs:hidden">
                                 <LogIn className="size-4" />
                             </Button>
-                            <Button className="hidden h-9 text-sm sm:flex">
+                            <Button className="hidden h-9 text-xs xs:flex">
                                 Sign in
                             </Button>
                         </Link>
