@@ -38,25 +38,24 @@ export default function Signin() {
     }
 
     return (
-        <div className="m-4 min-h-screen flex md:items-center md:gap-3 md:mx-14 
-        lg:mx-80 lg:gap-10">
-            <div className="hidden md:flex w-[50%] md:flex-col md:items-center md:gap-4">
+        <div className="m-4 min-h-fit flex md:gap-2 md:mx-10 lg:mx-16 lg:gap-8 xl:min-h-[80vh] justify-center items-center">
+            <div className="hidden md:flex md:flex-col md:items-center md:justify-center md:gap-1">
                 <Image 
                     src="/logo.png" 
                     alt="gambar logo" 
                     width={125}
                     height={125}
-                    className="w-32 h-32 lg:w-40 lg:h-40"    
+                    className="md:w-16 md:h-16 lg:w-20 lg:h-20"    
                 />
-                <h1 className="text-2xl font-bold lg:text-4xl">Connect, Share and Discover</h1>
-                <h3 className="text-chart-3 text-base lg:text-lg">A place to share your thoughts, connect with others, and 
-                    discover something new every day.</h3>
+                <p className="text-base font-bold lg:text-lg">Connect, Share and Discover</p>
+                <p className="text-chart-3 text-sm text-center lg:text-base">A place to share your thoughts, connect with others, and 
+                    discover something new every day.</p>
             </div>
-            <Card className="w-full max-h-fit md:w-[50%] shadow-xl">
+            <Card className="w-full max-h-fit shadow-xl sm:max-w-96 md:max-w-full xl:max-w-125">
                 <CardHeader className="flex justify-center">
                     <CardTitle className="flex flex-col items-center">
-                        <h1 className="text-2xl font-bold lg:text-4xl">Welcome</h1>
-                        <h2 className="text-lg lg:text-2xl">to NekoBlog-App</h2>
+                        <p className="text-xl lg:text-2xl">Welcome</p>
+                        <p className="text-sm lg:text-lg">to NekoBlog-App</p>
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -67,7 +66,7 @@ export default function Signin() {
                                 control={form.control}
                                 render={({ field, fieldState }) => (
                                     <Field data-invalid={fieldState.invalid}>
-                                        <FieldLabel htmlFor="email-form" className="text-xl lg:text-3xl">
+                                        <FieldLabel htmlFor="email-form" className="text-sm lg:text-lg">
                                             Email:
                                         </FieldLabel>
                                         <Input
@@ -76,7 +75,7 @@ export default function Signin() {
                                             aria-invalid={fieldState.invalid}
                                             placeholder="your@email.com"
                                             autoComplete="off"
-                                            className="h-10 w-fit lg:h-16 lg:placeholder:text-xl lg:text-xl!"
+                                            className="h-10 placeholder:text-sm text-sm lg:text-base lg:placeholder:text-base"
                                             type="email"
                                         />
                                         {fieldState.invalid && (
@@ -90,29 +89,29 @@ export default function Signin() {
                                 control={form.control}
                                 render={({ field, fieldState }) => (
                                     <Field data-invalid={fieldState.invalid}>
-                                        <FieldLabel htmlFor="password-form" className="text-xl lg:text-3xl">
+                                        <FieldLabel htmlFor="password-form" className="text-sm lg:text-lg">
                                             Password:
                                         </FieldLabel>
-                                        <InputGroup className="h-10 w-fit lg:h-16">
+                                        <InputGroup className="h-10">
                                             <InputGroupInput
                                                 {...field}
                                                 id="password-form"
                                                 aria-invalid={fieldState.invalid}
                                                 placeholder="Password"
                                                 autoComplete="off"
-                                                className="lg:placeholder:text-xl lg:text-xl!"
+                                                className="placeholder:text-sm text-sm lg:text-base lg:placeholder:text-base"
                                                 type="password"
                                             />
                                             <InputGroupAddon align="inline-end">
-                                                <EyeOffIcon className="size-4 lg:size-7"/>
+                                                <EyeOffIcon className="size-4"/>
                                             </InputGroupAddon>
                                             {fieldState.invalid && (
                                                 <FieldError errors={[fieldState.error]} />
                                             )}
                                         </InputGroup>
                                         <FieldDescription className="flex justify-end">
-                                            <Link href="#" className="no-underline! text-base lg:text-lg">
-                                                Forgot Password ?
+                                            <Link href="#" className="no-underline! text-[12px] lg:text-sm">
+                                                Forgot Password?
                                             </Link>
                                         </FieldDescription>
                                     </Field>
@@ -125,15 +124,15 @@ export default function Signin() {
                     <Button
                         type="submit"
                         form="form-signin"
-                        className="w-full h-11 text-lg lg:h-14 lg:text-xl"
+                        className="w-full h-9 text-sm lg:text-base lg:h-10"
                     >
                         Sign in
                     </Button>
-                    <h2 className="text-sidebar-ring text-base lg:text-lg">--Or--</h2>
-                    <Button className="w-full h-11 text-lg lg:h-14 lg:text-xl">
+                    <h2 className="text-sidebar-ring text-sm lg:text-base">--Or--</h2>
+                    <Button className="w-full h-9 text-sm lg:text-base lg:h-10">
                         Sign in with Google
                     </Button>
-                    <p className="text-base mt-4 lg:text-lg">Don&apos;t have an account?
+                    <p className="text-sm mt-4 lg:text-base">Don&apos;t have an account?
                         <Link href="/auth/signup" className="text-chart-2 hover:text-chart-5"> Sign up</Link>
                     </p>
                 </CardFooter>
