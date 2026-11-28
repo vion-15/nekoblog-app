@@ -84,47 +84,43 @@ export default function Signup() {
 
     return (
         <>
-            <div className="m-4 min-h-screen flex md:items-center md:gap-3 md:mx-14
-                lg:mx-80 lg:gap-10 md:mt-10 lg:mt-0">
-                <div className="hidden md:flex w-[50%] md:flex-col md:items-center md:gap-4">
+            <div className="m-4 min-h-fit flex md:gap-2 md:mx-10 lg:mx-16 lg:gap-8 xl:min-h-[80vh] justify-center items-center">
+                <div className="hidden md:flex md:flex-col md:items-center md:justify-center md:gap-1">
                     <Image
                         src="/logo.png"
                         alt="gambar logo"
                         width={125}
                         height={125}
-                        className="w-32 h-32 lg:w-40 lg:h-40"
+                        className="md:w-16 md:h-16 lg:w-20 lg:h-20"
                     />
-                    <h1 className="text-2xl font-bold lg:text-4xl">Connect, Share and Discover</h1>
-                    <h3 className="text-chart-3 text-base lg:text-lg">A place to share your thoughts, connect with others, and
-                        discover something new every day.</h3>
+                    <p className="text-base font-bold lg:text-lg">Connect, Share and Discover</p>
+                    <p className="text-chart-3 text-sm text-center lg:text-base">A place to share your thoughts, connect with others, and
+                        discover something new every day.</p>
                 </div>
-                <Card className="w-full max-h-fit md:w-[50%] shadow-xl">
-                    <CardHeader className="flex justify-center mt-3 lg:mt-5">
+                <Card className="w-full max-h-fit shadow-xl sm:max-w-96 md:max-w-full xl:max-w-125">
+                    <CardHeader className="flex justify-center">
                         <CardTitle className="flex items-center">
-                            <h1 className="text-2xl font-bold lg:text-4xl">Create new account</h1>
+                            <p className="text-xl">Create new account</p>
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <Form action="" onSubmit={form.handleSubmit(onSubmit)} id="form-signup" className="lg:px-5">
+                        <Form action="" onSubmit={form.handleSubmit(onSubmit)} id="form-signup">
                             <FieldGroup>
                                 <Controller
                                     name="email"
                                     control={form.control}
                                     render={({ field, fieldState }) => (
                                         <Field data-invalid={fieldState.invalid}>
-                                            <FieldLabel htmlFor="email-form" className="text-xl lg:text-3xl">
+                                            <FieldLabel htmlFor="email-form" className="text-sm lg:text-lg">
                                                 Email:
                                             </FieldLabel>
-                                            <FieldDescription className="lg:text-xl">
-                                                Your active email
-                                            </FieldDescription>
                                             <Input
                                                 {...field}
                                                 id="email-form"
                                                 aria-invalid={fieldState.invalid}
                                                 placeholder="Your@email.com"
                                                 autoComplete="off"
-                                                className="h-10 w-full lg:h-16 lg:placeholder:text-xl lg:text-xl!"
+                                                className="h-10 placeholder:text-sm text-sm lg:text-base lg:placeholder:text-base"
                                                 type="email"
                                                 required
                                             />
@@ -139,29 +135,29 @@ export default function Signup() {
                                     control={form.control}
                                     render={({ field, fieldState }) => (
                                         <Field data-invalid={fieldState.invalid}>
-                                            <FieldLabel htmlFor="password-form" className="text-xl lg:text-3xl">
+                                            <FieldLabel htmlFor="password-form" className="text-sm lg:text-lg">
                                                 Password:
                                             </FieldLabel>
-                                            <InputGroup className="h-10 w-fit lg:h-16 ">
+                                            <InputGroup className="h-10">
                                                 <InputGroupInput
                                                     {...field}
                                                     id="password-form"
                                                     aria-invalid={fieldState.invalid}
                                                     placeholder="Password"
                                                     autoComplete="off"
-                                                    className="lg:placeholder:text-xl lg:text-xl!"
+                                                    className="placeholder:text-sm text-sm lg:text-base lg:placeholder:text-base"
                                                     type={showPassword ? "text" : "password"}
                                                 />
                                                 <InputGroupAddon align="inline-end">
                                                     {showPassword ? <Button variant="ghost" onClick={() => setShowPassword(false)}>
-                                                        <Eye className="size-4 lg:size-7" />
+                                                        <Eye className="size-4" />
                                                     </Button> : <Button variant="ghost" onClick={() => setShowPassword(true)}>
-                                                        <EyeOffIcon className="size-4 lg:size-7" />
+                                                        <EyeOffIcon className="size-4" />
                                                     </Button>}
                                                 </InputGroupAddon>
                                             </InputGroup>
                                             {fieldState.invalid && (
-                                                <FieldError errors={[fieldState.error]} className="lg:text-xl" />
+                                                <FieldError errors={[fieldState.error]} />
                                             )}
                                         </Field>
                                     )}
@@ -171,29 +167,29 @@ export default function Signup() {
                                     control={form.control}
                                     render={({ field, fieldState }) => (
                                         <Field data-invalid={fieldState.invalid}>
-                                            <FieldLabel htmlFor="form-confirm" className="text-xl lg:text-3xl">
+                                            <FieldLabel htmlFor="form-confirm" className="text-sm lg:text-lg">
                                                 Confirm Password:
                                             </FieldLabel>
-                                            <InputGroup className="h-10 w-fit lg:h-16">
+                                            <InputGroup className="h-10">
                                                 <InputGroupInput
                                                     {...field}
                                                     id="form-confirm"
                                                     aria-invalid={fieldState.invalid}
                                                     placeholder="Confirm password"
                                                     autoComplete="off"
-                                                    className="lg:placeholder:text-xl lg:text-xl!"
+                                                    className="placeholder:text-sm text-sm lg:text-base lg:placeholder:text-base"
                                                     type={showConfirmPassword ? "text" : "password"}
                                                 />
                                                 <InputGroupAddon align="inline-end">
                                                     {showConfirmPassword ? <Button variant="ghost" onClick={() => setShowConfirmPassword(false)}>
-                                                        <Eye className="size-4 lg:size-7" />
+                                                        <Eye className="size-4" />
                                                     </Button> : <Button variant="ghost" onClick={() => setShowConfirmPassword(true)}>
-                                                        <EyeOffIcon className="size-4 lg:size-7" />
+                                                        <EyeOffIcon className="size-4" />
                                                     </Button>}
                                                 </InputGroupAddon>
                                             </InputGroup>
                                             {fieldState.invalid && (
-                                                <FieldError errors={[fieldState.error]} className="lg:text-xl" />
+                                                <FieldError errors={[fieldState.error]} />
                                             )}
                                         </Field>
                                     )}
@@ -201,19 +197,19 @@ export default function Signup() {
                             </FieldGroup>
                         </Form>
                     </CardContent>
-                    <CardFooter className="flex flex-col gap-3 lg:px-10">
+                    <CardFooter className="flex flex-col gap-3">
                         <Button
                             type="submit"
                             form="form-signup"
-                            className="w-full h-11 text-lg lg:h-14 lg:text-xl"
+                            className="w-full h-9 text-sm lg:text-base lg:h-10"
                         >
                             Sign up
                         </Button>
-                        <h2 className="text-sidebar-ring text-base lg:text-lg">--Or--</h2>
-                        <Button className="w-full h-11 text-lg lg:h-14 lg:text-xl">
+                        <h2 className="text-sidebar-ring text-sm lg:text-base">--Or--</h2>
+                        <Button className="w-full h-9 text-sm lg:text-base lg:h-10">
                             Sign up with Google
                         </Button>
-                        <p className="text-base mt-4 lg:text-lg">Already have an account?
+                        <p className="text-sm mt-4 lg:text-base">Already have an account?
                             <Link href="/auth/signin" className="text-chart-2 hover:text-chart-5"> Sign in</Link>
                         </p>
                     </CardFooter>
